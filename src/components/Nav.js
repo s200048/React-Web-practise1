@@ -1,11 +1,13 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 import { Link } from 'react-router-dom'
 import "./Nav.css"
+import { Button } from "./Button"
 
 
 const Nav = () => {
 
     const [click, setClick] = useState(false);
+    const [button, setButton] = useState(true);
 
     const clickHandler = () => {
         setClick(!click);
@@ -15,13 +17,26 @@ const Nav = () => {
         setClick(false);
     }
 
-    
+    const showButton = () => {
+        if (window.innerWidth <= 960) {
+          setButton(false);
+        } else {
+          setButton(true);
+        }
+    };
+
+    useEffect(() => {
+        showButton();
+      }, []);
+
+    window.addEventListener('resize', showButton);
 
     return (
         <nav className="navbar">
             <div className="nav-container">
-                <Link to="/" className="nav-logo">
+                <Link to="/" className="nav-logo" onClick={closeMobileMenu}>
                     HowardCo.
+                    <i class='fab fa-typo3' />
                 </Link>
                 <div className="menu-icon" onClick={clickHandler}>
                     <i className={click ? "fas fa-times" : "fas fa-bars"}></i>
@@ -42,17 +57,17 @@ const Nav = () => {
                             Products
                         </Link>
                     </li>
-                    <li className="nav-item">
-                        <Link to="/signup" className="nav-links" onClick={closeMobileMenu}>
+                    <li>
+                        <Link to="/signup" className="nav-links-mobile" onClick={closeMobileMenu}>
                             Sign Up
                         </Link>
                     </li>
                 </ul>
-                <a href="https://www.youtube.com/watch?v=I2UBjN5ER4s&ab_channel=BrianDesign"> Youtube </a>
+                {button && <Button buttonStyle='btn--outline' >SIGN UP</Button>}
             </div>
-
         </nav>
     )
 }
+
 
 export default Nav
